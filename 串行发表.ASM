@@ -1,0 +1,45 @@
+		ORG		00H
+		AJMP		MAIN
+		ORG		23H
+		AJMP		ZD
+		ORG		30H
+
+
+
+MAIN:		
+		MOV		SP,#60H	
+		MOV		TMOD,#20H
+		MOV		TH1,#0FDH
+		MOV		TL1,#0FDH
+		MOV		PCON,#00H
+		MOV		SCON,#50H
+		MOV		40H,#0
+		SETB		EA
+		SETB		ET0
+		SETB		TR1
+		;SETB		ES
+		MOV	44H,#0	
+		MOV	B,#30	    
+		
+GG:		MOV	DPTR,#TAB
+		MOV	A,44H
+		MOVC		A,@A+DPTR
+		INC	44H
+		MOV		SBUF,A
+		JNB		TI,$
+		CLR		TI
+		CLR	ES
+		DJNZ	B,GG
+		AJMP		$
+TAB:DB	"http://www.gjwtech.com"
+
+ZD:		CLR		ES
+		CLR		RI
+		MOV		A,SBUF
+		MOV		40H,A
+		MOV		SBUF,A
+		JNB		TI,$
+		CLR		TI
+		SETB		ES
+		RETI
+		END
